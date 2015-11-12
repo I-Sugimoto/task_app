@@ -1,6 +1,6 @@
 <?php
 
-define('DSN', 'mysql:host=localhost;dbname=nowall_bbs;charset=utf8');
+define('DSN', 'mysql:host=localhost;dbname=nowall_tasks;charset=utf8');
 define('USER', 'testuser');
 define('PASSWORD', '9999');
 
