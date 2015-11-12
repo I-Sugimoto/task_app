@@ -1,15 +1,35 @@
 <?php
 
-// require_once('config.php');
-// require_once('functions.php');
+session_start();
+require_once('config.php');
+require_once('functions.php');
 
-// session_start();
+if ($_SERVER['REQUEST_METHOD'] == 'POST')
+{
+  $name = $_POST['name'];
+  $errors = array();
 
-// if (empty($_SESSION['id']))
-// {
-//   header('Location: login.php');
-//   exit;
-// }
+  // バリデーション
+  if ($name == '')
+  {
+    $errors['name'] = 'タスクが未入力です';
+  }
+
+  // バリデーション突破後
+  if (empty($errors))
+  {
+    $dbh = connectDatabase();//dbhは一度呼び出せば大丈夫。
+    $sql = "select * from tasks where name = :name";
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(":name", $task);
+    $stmt->execute();
+
+    $row = $stmt->fetch();
+    var_dump($row);
+  }
+
+}
+
 
 // echo h($post_id['id'] = $_GET['id'] && $user_id = $_SESSION['id']);
 
@@ -64,8 +84,11 @@
   <body>
     <h1>タスク管理アプリ(編集削除機能アリ)</h1>
     <form action="" method="post">
-      <textarea name="message" cols="30" rows="1"></textarea>
+      <textarea name="name" cols="30" rows="1"></textarea>
       <input class="btn" type="submit" value="追加">
+        <?php if ($errors['name']) : ?>
+          <?php echo h($errors['name']) ?>
+        <?php endif ?>
     </form>
     <h2>未完了タスク</h2>
       <ul>
