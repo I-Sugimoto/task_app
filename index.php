@@ -19,9 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
   if (empty($errors))
   {
     $dbh = connectDatabase();//dbhは一度呼び出せば大丈夫。
-    $sql = "select * from tasks where name = :name";
+    $sql = "insert into tasks (name, created_at, updated_at) values (:name, now(), now())";
     $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(":name", $task);
+    $stmt->bindParam(":name", $name);
     $stmt->execute();
 
     $row = $stmt->fetch();
